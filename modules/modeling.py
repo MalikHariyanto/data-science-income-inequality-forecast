@@ -4,13 +4,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def show(df_raw):
-    st.markdown("# 🤖 Modeling")
-    st.markdown("Pada tahap ini, kita akan melakukan pemodelan menggunakan metode Double Exponential Smoothing (Holt's Method) untuk memprediksi koefisien GINI berdasarkan data historis.")
-    
+    st.markdown("# Modeling")
+    st.markdown("Tahap ini membahas pemodelan menggunakan Double Exponential Smoothing (Holt's Method) untuk memprediksi koefisien GINI berdasarkan data historis.")
+
     st.markdown("""
     <div class='process-header'>
-        <h3>📐 Double Exponential Smoothing</h3>
-        <p>Metode forecasting untuk time series dengan trend linier.</p>
+        <h3>Double Exponential Smoothing</h3>
+        <p>Metode peramalan untuk data deret waktu dengan tren linier.</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -20,12 +20,11 @@ def show(df_raw):
     with col1:
         st.markdown("""
         <div class='info-card'>
-            <h4>📖 Tentang Metode</h4>
-            <p>Double Exponential Smoothing (DES) adalah teknik peramalan yang cocok untuk data dengan <strong>trend linier</strong>.</p>
-            <p>Metode ini menggunakan dua level smoothing untuk menangkap:</p>
+            <h4>Tentang Metode</h4>
+            <p>Double Exponential Smoothing (DES) adalah teknik peramalan yang efektif untuk data dengan tren linier. Metode ini menggunakan dua tingkat smoothing untuk menangkap komponen level dan tren pada data.</p>
             <ul>
-                <li><strong>Level (a)</strong>: Nilai rata-rata yang di-smooth</li>
-                <li><strong>Trend (b)</strong>: Arah perubahan data</li>
+                <li><strong>Level (a):</strong> Nilai rata-rata yang dihaluskan</li>
+                <li><strong>Trend (b):</strong> Arah perubahan data</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
@@ -33,20 +32,20 @@ def show(df_raw):
     with col2:
         st.markdown("""
         <div class='info-card'>
-            <h4>🎛️ Parameter Model</h4>
-            <p><strong>Alpha (α)</strong>: Smoothing factor (0 < α < 1)</p>
+            <h4>Parameter Model</h4>
+            <p><strong>Alpha (α):</strong> Faktor smoothing (0 < α < 1)</p>
             <ul>
-                <li>α mendekati 0 → smoothing lambat, stabil</li>
-                <li>α mendekati 1 → responsif, mengikuti data terbaru</li>
+                <li>α mendekati 0: smoothing lambat, hasil lebih stabil</li>
+                <li>α mendekati 1: lebih responsif terhadap data terbaru</li>
             </ul>
-            <p><strong>Rekomendasi:</strong> α = 0.1 - 0.3 untuk data stabil</p>
+            <p><strong>Rekomendasi:</strong> α = 0.1 - 0.3 untuk data yang relatif stabil</p>
         </div>
         """, unsafe_allow_html=True)
     
     st.markdown("<br>", unsafe_allow_html=True)
     
     # Formulas
-    st.subheader("📝 Formula Double Exponential Smoothing")
+    st.subheader("Formula Double Exponential Smoothing")
     
     st.markdown("""
     <div class='highlight-box'>
@@ -66,15 +65,15 @@ def show(df_raw):
     st.markdown("<br>", unsafe_allow_html=True)
     
     # Interactive Demo
-    st.markdown("### 🔬 Demo Perhitungan")
+    st.markdown("### Demo Perhitungan")
     
     with st.sidebar:
         st.markdown("---")
-        st.markdown("### 📊 Parameter Model")
+        st.markdown("### Parameter Model")
         alpha = st.slider("Alpha (α)", min_value=0.01, max_value=0.99, value=0.80, step=0.01)
         periods_ahead = st.number_input("Periode Prediksi", min_value=1, max_value=20, value=5)
         
-        if st.button("🔥 Hitung Forecast", type="primary", use_container_width=True):
+        if st.button("Hitung Forecast", type="primary", use_container_width=True):
             st.session_state.calculate = True
     
     if st.session_state.get("calculate", False):
@@ -93,27 +92,50 @@ def show(df_raw):
         for t in range(1, n):
             S1.append(alpha * Y[t] + (1 - alpha) * S1[t-1])
             S2.append(alpha * S1[t] + (1 - alpha) * S2[t-1])
-        
-        a = [2 * S1[t] - S2[t] for t in range(n)]
-        b = [(alpha / (1 - alpha)) * (S1[t] - S2[t]) for t in range(n)]
-        forecast = [a[t] + b[t] * 1 if t < n else None for t in range(n)]
+
+        a = [2 * S1[i] - S2[i] for i in range(n)]
+        b = [(alpha / (1 - alpha)) * (S1[i] - S2[i]) for i in range(n)]
+
+        # Forecast in-sample: forecast[0]=np.nan, forecast[i]=a[i-1]+b[i-1]
+        forecast = [np.nan]
+        for i in range(1, n):
+            forecast.append(a[i-1] + b[i-1])
+
+        # Extend forecast for future periods
         for m in range(1, periods_ahead + 1):
             future_forecast = a[-1] + b[-1] * m
             forecast.append(future_forecast)
         
         # Tabel Hasil
-        st.markdown("#### 📋 Tabel Perhitungan")
+
+        st.markdown("#### Tabel Perhitungan")
         table_data = []
         for i in range(n):
+            y_true = Y[i]
+            y_pred = forecast[i]
+            if i == 0 or np.isnan(y_pred):
+                err = np.nan
+                abs_err = np.nan
+                sq_err = np.nan
+                abs_pct_err = np.nan
+            else:
+                err = y_true - y_pred
+                abs_err = abs(err)
+                sq_err = err ** 2
+                abs_pct_err = abs_err / y_true if y_true != 0 else np.nan
             table_data.append({
                 "No": i + 1,
                 "Tahun": int(years[i]),
-                "Gini (Yt)": f"{Y[i]:.4f}",
-                "S't": f"{S1[i]:.4f}",
-                "S''t": f"{S2[i]:.4f}",
-                "at": f"{a[i]:.4f}",
-                "bt": f"{b[i]:.4f}",
-                "Forecast": f"{forecast[i]:.4f}" if forecast[i] is not None else "-",
+                "Gini (Yt)": f"{y_true:.6f}",
+                "S1": f"{S1[i]:.6f}",
+                "S2": f"{S2[i]:.6f}",
+                "a": f"{a[i]:.6f}",
+                "b": f"{b[i]:.6f}",
+                "Forecast": f"{y_pred:.6f}" if not np.isnan(y_pred) else "-",
+                "Error": f"{err:.6f}" if not np.isnan(err) else "-",
+                "Abs Error": f"{abs_err:.6f}" if not np.isnan(abs_err) else "-",
+                "Error^2": f"{sq_err:.6f}" if not np.isnan(sq_err) else "-",
+                "Abs Error/Actual": f"{abs_pct_err:.6f}" if not np.isnan(abs_pct_err) else "-",
             })
         st.dataframe(pd.DataFrame(table_data), use_container_width=True, hide_index=True)
         
@@ -122,7 +144,7 @@ def show(df_raw):
         future_years = [years[-1] + k + 1 for k in range(periods_ahead)]
         future_forecasts = [a[-1] + b[-1] * m for m in range(1, periods_ahead + 1)]
         
-        st.markdown(f"#### 🔮 Prediksi {periods_ahead} Tahun ke Depan")
+        st.markdown(f"#### Prediksi {periods_ahead} Tahun ke Depan")
         pred_df = pd.DataFrame({
             "Tahun": future_years,
             "Prediksi Gini": [f"{v:.4f}" for v in future_forecasts]
@@ -131,7 +153,7 @@ def show(df_raw):
         
         # ========== GRAFIK VISUALISASI ==========
         st.markdown("<br>", unsafe_allow_html=True)
-        st.subheader("📈 Visualisasi: Aktual vs Forecast")
+        st.subheader("Visualisasi: Aktual vs Forecast")
         
         fig, ax = plt.subplots(figsize=(12, 6))
         
@@ -167,4 +189,4 @@ def show(df_raw):
         
         st.pyplot(fig)
     else:
-        st.info("👈 Atur parameter di sidebar dan klik **Hitung Forecast** untuk melihat hasil perhitungan.")
+        st.info("Silakan atur parameter di sidebar dan klik 'Hitung Forecast' untuk melihat hasil perhitungan.")
