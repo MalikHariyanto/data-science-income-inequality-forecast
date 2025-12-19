@@ -20,8 +20,8 @@ def show(df_raw):
     with col1:
         st.markdown("""
         <div class='info-card'>
-            <h4>Tentang Metode</h4>
-            <p>Double Exponential Smoothing (DES) adalah teknik peramalan yang efektif untuk data dengan tren linier. Metode ini menggunakan dua tingkat smoothing untuk menangkap komponen level dan tren pada data.</p>
+            <h4>Proses Perhitungan</h4>
+            <p>Proses Double Exponential Smoothing (DES) terdiri dari dua tahap smoothing untuk menangkap komponen level dan tren pada data deret waktu. Setiap tahap perhitungan melibatkan pembaruan nilai level dan tren, yang kemudian digunakan untuk menghasilkan prediksi pada periode berikutnya.</p>
             <ul>
                 <li><strong>Level (a):</strong> Nilai rata-rata yang dihaluskan</li>
                 <li><strong>Trend (b):</strong> Arah perubahan data</li>
