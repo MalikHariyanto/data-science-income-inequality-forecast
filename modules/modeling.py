@@ -14,35 +14,35 @@ def show(df_raw):
     </div>
     """, unsafe_allow_html=True)
     
-    # Method Explanation
-    col1, col2 = st.columns(2)
+    # # Method Explanation
+    # col1, col2 = st.columns(2)
     
-    with col1:
-        st.markdown("""
-        <div class='info-card'>
-            <h4>Proses Perhitungan</h4>
-            <p>Proses Double Exponential Smoothing (DES) terdiri dari dua tahap smoothing untuk menangkap komponen level dan tren pada data deret waktu. Setiap tahap perhitungan melibatkan pembaruan nilai level dan tren, yang kemudian digunakan untuk menghasilkan prediksi pada periode berikutnya.</p>
-            <ul>
-                <li><strong>Level (a):</strong> Nilai rata-rata yang dihaluskan</li>
-                <li><strong>Trend (b):</strong> Arah perubahan data</li>
-            </ul>
-        </div>
-        """, unsafe_allow_html=True)
+    # with col1:
+    #     st.markdown("""
+    #     <div class='info-card'>
+    #         <h4>Proses Perhitungan</h4>
+    #         <p>Proses Double Exponential Smoothing (DES) terdiri dari dua tahap smoothing untuk menangkap komponen level dan tren pada data deret waktu. Setiap tahap perhitungan melibatkan pembaruan nilai level dan tren, yang kemudian digunakan untuk menghasilkan prediksi pada periode berikutnya.</p>
+    #         <ul>
+    #             <li><strong>Level (a):</strong> Nilai rata-rata yang dihaluskan</li>
+    #             <li><strong>Trend (b):</strong> Arah perubahan data</li>
+    #         </ul>
+    #     </div>
+    #     """, unsafe_allow_html=True)
     
-    with col2:
-        st.markdown("""
-        <div class='info-card'>
-            <h4>Parameter Model</h4>
-            <p><strong>Alpha (α):</strong> Faktor smoothing (0 < α < 1)</p>
-            <ul>
-                <li>α mendekati 0: smoothing lambat, hasil lebih stabil</li>
-                <li>α mendekati 1: lebih responsif terhadap data terbaru</li>
-            </ul>
-            <p><strong>Rekomendasi:</strong> α = 0.1 - 0.3 untuk data yang relatif stabil</p>
-        </div>
-        """, unsafe_allow_html=True)
+    # with col2:
+    #     st.markdown("""
+    #     <div class='info-card'>
+    #         <h4>Parameter Model</h4>
+    #         <p><strong>Alpha (α):</strong> Faktor smoothing (0 < α < 1)</p>
+    #         <ul>
+    #             <li>α mendekati 0: smoothing lambat, hasil lebih stabil</li>
+    #             <li>α mendekati 1: lebih responsif terhadap data terbaru</li>
+    #         </ul>
+    #         <p><strong>Rekomendasi:</strong> α = 0.1 - 0.3 untuk data yang relatif stabil</p>
+    #     </div>
+    #     """, unsafe_allow_html=True)
     
-    st.markdown("<br>", unsafe_allow_html=True)
+    # st.markdown("<br>", unsafe_allow_html=True)
     
     # Formulas
     st.subheader("Formula Double Exponential Smoothing")
