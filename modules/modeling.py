@@ -4,14 +4,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def show(df_raw):
-    # surya, modeling grafik dan forecast periode tertentu
     st.markdown("# 🤖 Modeling")
-    st.markdown("*Pembangunan model Double Exponential Smoothing*")
-    st.markdown("---")
+    st.markdown("Pada tahap ini, kita akan melakukan pemodelan menggunakan metode Double Exponential Smoothing (Holt's Method) untuk memprediksi koefisien GINI berdasarkan data historis.")
     
     st.markdown("""
     <div class='process-header'>
-        <h3>📐 Double Exponential Smoothing (Holt's Method)</h3>
+        <h3>📐 Double Exponential Smoothing</h3>
         <p>Metode forecasting untuk time series dengan trend linier.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -23,7 +21,7 @@ def show(df_raw):
         st.markdown("""
         <div class='info-card'>
             <h4>📖 Tentang Metode</h4>
-            <p>Double Exponential Smoothing (DES) atau Brown's Method adalah teknik peramalan yang cocok untuk data dengan <strong>trend linier</strong>.</p>
+            <p>Double Exponential Smoothing (DES) adalah teknik peramalan yang cocok untuk data dengan <strong>trend linier</strong>.</p>
             <p>Metode ini menggunakan dua level smoothing untuk menangkap:</p>
             <ul>
                 <li><strong>Level (a)</strong>: Nilai rata-rata yang di-smooth</li>
@@ -68,7 +66,7 @@ def show(df_raw):
     st.markdown("<br>", unsafe_allow_html=True)
     
     # Interactive Demo
-    st.subheader("🔬 Demo Perhitungan")
+    st.markdown("### 🔬 Demo Perhitungan")
     
     with st.sidebar:
         st.markdown("---")
@@ -96,12 +94,12 @@ def show(df_raw):
             S1.append(alpha * Y[t] + (1 - alpha) * S1[t-1])
             S2.append(alpha * S1[t] + (1 - alpha) * S2[t-1])
         
-        a = [2 * S1[i] - S2[i] for i in range(n)]
-        b = [((alpha / (1 - alpha)) * (S1[i] - S2[i])) if (1 - alpha) != 0 else 0.0 for i in range(n)]
-        
-        forecast = [None]
-        for i in range(1, n):
-            forecast.append(a[i-1] + b[i-1])
+        a = [2 * S1[t] - S2[t] for t in range(n)]
+        b = [(alpha / (1 - alpha)) * (S1[t] - S2[t]) for t in range(n)]
+        forecast = [a[t] + b[t] * 1 if t < n else None for t in range(n)]
+        for m in range(1, periods_ahead + 1):
+            future_forecast = a[-1] + b[-1] * m
+            forecast.append(future_forecast)
         
         # Tabel Hasil
         st.markdown("#### 📋 Tabel Perhitungan")
@@ -138,11 +136,18 @@ def show(df_raw):
         fig, ax = plt.subplots(figsize=(12, 6))
         
         # Plot data aktual
+
+        # Debug: Print lengths to diagnose error
+        print(f"Length of years: {len(years)}")
+        print(f"Length of forecast_clean: {len([f if f is not None else np.nan for f in forecast])}")
+
         ax.plot(years, Y, marker='o', label='Actual GINI', color='#00E396', linewidth=2, markersize=6)
-        
+
         # Plot forecast in-sample
         forecast_clean = [f if f is not None else np.nan for f in forecast]
-        ax.plot(years, forecast_clean, marker='x', linestyle='--', label='Forecast (In-sample)', color='#00D1FF', linewidth=2)
+        # Ensure forecast_clean matches years length
+        forecast_clean_plot = forecast_clean[:len(years)]
+        ax.plot(years, forecast_clean_plot, marker='x', linestyle='--', label='Forecast (In-sample)', color='#00D1FF', linewidth=2)
         
         # Plot forecast future
         ax.plot(future_years, future_forecasts, marker='s', linestyle='--', label='Forecast (Future)', color='#FEB019', linewidth=2, markersize=8)
@@ -161,7 +166,5 @@ def show(df_raw):
         ax.grid(True, alpha=0.3)
         
         st.pyplot(fig)
-        st.success("✅ Modeling dan visualisasi berhasil dijalankan!")
-        
     else:
         st.info("👈 Atur parameter di sidebar dan klik **Hitung Forecast** untuk melihat hasil perhitungan.")
