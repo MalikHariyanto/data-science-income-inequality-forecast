@@ -62,8 +62,8 @@ def show(df_raw):
         info_df = pd.DataFrame({
             "Column": df_original.columns,
             "Data Type": df_original.dtypes.astype(str),
-            "Non-Null Count": df_original.count(),
-            "Null Count": df_original.isnull().sum()
+            # "Non-Null Count": df_original.count(),
+            # "Null Count": df_original.isnull().sum()
         })
         st.dataframe(info_df, use_container_width=True, hide_index=True)
     
@@ -170,99 +170,32 @@ def show(df_raw):
     st.markdown("---")
 
     # ========== STEP: Stationarity Test (ADF) - Added from Reference ==========
-    st.markdown("## 📊 STEP 4: Uji Stasioneritas Data (ADF Test)")
-    
+
+    # ========== STEP 4: Boxplot Visualisasi Kolom Numerik ========== 
+    st.markdown("## 📊 STEP 4: Boxplot Kolom Numerik")
     st.markdown("""
     <div class='highlight-box'>
-        <strong>📌 Penjelasan Uji Normalitas:</strong><br>
-        ✓ Menggunakan <strong>Augmented Dickey-Fuller (ADF) Test</strong> untuk mengecek apakah data time series stasioner atau tidak.<br>
-        ✓ <strong>H0 (Null Hypothesis)</strong>: Data tidak stasioner (memiliki unit root).<br>
-        ✓ <strong>H1 (Alternative Hypothesis)</strong>: Data stasioner.<br>
-        ✓ Jika p-value < 0.05, maka H0 ditolak (Data Stasioner).
+        <strong>📌 Penjelasan Step 4:</strong><br>
+        ✓ Visualisasi distribusi dan deteksi outlier pada setiap kolom numerik (kecuali 'Year') menggunakan boxplot.<br>
+        ✓ Membantu memahami sebaran data dan potensi nilai ekstrim/outlier.<br>
     </div>
     """, unsafe_allow_html=True)
 
-    try:
-        from statsmodels.tsa.stattools import adfuller
-        
-        # Lakukan uji ADF pada data target yang sudah bersih
-        series_test = df_clean['gini_disp']
-        adf_result = adfuller(series_test)
-        
-        adf_stat = adf_result[0]
-        p_value = adf_result[1]
-        
-        col_adf1, col_adf2 = st.columns(2)
-        
-        with col_adf1:
-            st.write("**Hasil Statistik ADF:**")
-            st.write(f"ADF Statistic: `{adf_stat:.4f}`")
-            st.write(f"p-value: `{p_value:.4f}`")
-            
-        with col_adf2:
-            st.write("**Kesimpulan (α = 0.05):**")
-            if p_value < 0.05:
-                st.success("✅ **Data Stasioner** (Tolak H0)")
-                st.info("Data cukup stabil untuk dimodelkan langsung.")
-            else:
-                st.warning("⚠️ **Data Tidak Stasioner** (Gagal Tolak H0)")
-                # Sesuai referensi, DES (Double Exponential Smoothing) justru cocok untuk data trend (tidak stasioner)
-                st.info("💡 Karena p-value > 0.05, data memiliki tren (tidak stasioner). Metode **Double Exponential Smoothing** SANGAT COCOK digunakan karena metode ini didesain khusus untuk menangani data yang memiliki tren.")
-        
-        st.write("**Critical Values:**")
-        critical_vals = pd.DataFrame(list(adf_result[4].items()), columns=['Level', 'Value'])
-        st.dataframe(critical_vals, use_container_width=True, hide_index=True)
+    # Pilih kolom numerik kecuali 'Year'
+    numeric_cols = df_clean.select_dtypes(include='number').columns
+    numeric_cols = [col for col in numeric_cols if col.lower() != "year"]
 
-        st.markdown("<br>", unsafe_allow_html=True)
-        
-        # 5.4 Differencing untuk Stationarity (Sesuai Screenshot User)
-        st.subheader("5.4 Differencing untuk Stationarity")
-        
-        tabs_diff = st.tabs(["1st Differencing", "2nd Differencing"])
-        
-        # Fungsi helper untuk plot differencing
-        def plot_differencing(diff_series, title, order):
-            # Drop NA akibat differencing
-            diff_clean_series = diff_series.dropna()
-            
-            # Hitung ADF ulang untuk data yang sudah didiff
-            res = adfuller(diff_clean_series)
-            stat = res[0]
-            p = res[1]
-            
-            col_d1, col_d2 = st.columns([1, 2])
-            
-            with col_d1:
-                st.markdown(f"**Statistic ({order}):** `{stat:.4f}`")
-                st.markdown(f"**p-value:** `{p:.4f}`")
-                if p < 0.05:
-                     st.success("✅ Stasioner")
-                else:
-                     st.warning("⚠️ Non-Stasioner")
-            
-            with col_d2:
-                fig_diff, ax_diff = plt.subplots(figsize=(8, 3))
-                ax_diff.plot(diff_clean_series.index, diff_clean_series.values, color='#00D1FF')
-                ax_diff.axhline(y=0, color='#EF4444', linestyle='--', linewidth=1)
-                ax_diff.set_title(title, color='white', fontsize=10)
-                # Styling
-                ax_diff.set_facecolor('#0E1117')
-                fig_diff.patch.set_facecolor('#0E1117')
-                ax_diff.tick_params(colors='white', labelsize=8)
-                ax_diff.grid(True, alpha=0.2)
-                st.pyplot(fig_diff)
+    # Loop kolom dan buat boxplot satu-satu
+    for col in numeric_cols:
+        fig, ax = plt.subplots(figsize=(10, 7))
+        ax.boxplot(df_clean[col].dropna())
+        ax.set_title(f"Boxplot {col}")
+        ax.set_ylabel(col)
+        ax.set_xticks([1])
+        ax.set_xticklabels([col])
+        ax.grid(True)
+        st.pyplot(fig)
 
-        with tabs_diff[0]:
-            diff1 = series_test.diff()
-            plot_differencing(diff1, "First Differencing Plot", "1st Diff")
-            
-        with tabs_diff[1]:
-            diff2 = series_test.diff().diff()
-            plot_differencing(diff2, "Second Differencing Plot", "2nd Diff")
-
-    except ImportError:
-        st.warning("⚠️ Library `statsmodels` belum terinstall. Silakan install dengan `pip install statsmodels` untuk melihat hasil Uji ADF.")
-        
     st.markdown("---")
     
     # ========== STEP 4: Column Selection & Filtering ==========
