@@ -5,6 +5,28 @@ def show(df_raw):
     st.markdown("# 💼 Business Understanding")
     st.markdown("*Memahami konteks bisnis dan tujuan proyek*")
     st.markdown("---")
+
+    # ===== Tambahan: Latar Belakang, Rumusan Masalah, Tujuan =====
+    st.markdown("""
+    <div class='highlight-box'>
+        <h3>🔎 Latar Belakang</h3>
+        <p>
+        Ketimpangan pendapatan merupakan salah satu isu utama yang dihadapi oleh banyak negara berkembang, termasuk Afrika Selatan. Tingginya tingkat ketimpangan dapat berdampak negatif terhadap pertumbuhan ekonomi, stabilitas sosial, dan kesejahteraan masyarakat. Oleh karena itu, pemahaman yang mendalam mengenai tren dan faktor-faktor yang mempengaruhi ketimpangan pendapatan sangat penting untuk merumuskan kebijakan yang efektif.
+        </p>
+        <h3>❓ Rumusan Masalah</h3>
+        <ul>
+            <li>Bagaimana tren ketimpangan pendapatan di Afrika Selatan selama beberapa dekade terakhir?</li>
+            <li>Faktor-faktor apa saja yang berkontribusi terhadap perubahan tingkat ketimpangan tersebut?</li>
+            <li>Bagaimana memprediksi tingkat ketimpangan pendapatan di masa depan menggunakan metode forecasting?</li>
+        </ul>
+        <h3>🎯 Tujuan</h3>
+        <ul>
+            <li>Menganalisis tren ketimpangan pendapatan di Afrika Selatan berdasarkan data historis.</li>
+            <li>Mengidentifikasi faktor-faktor utama yang mempengaruhi ketimpangan pendapatan.</li>
+            <li>Membangun model prediksi untuk memperkirakan tingkat ketimpangan pendapatan di masa mendatang.</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
     
     # david, business under - Redesigned UI
     st.markdown("""
