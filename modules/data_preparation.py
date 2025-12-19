@@ -4,19 +4,19 @@ import matplotlib.pyplot as plt
 
 def show(df_raw):
     # safii, data preparation
-    st.markdown("# 🧹 Data Preparation")
-    st.markdown("*Data Cleaning, Transformation, dan Exploration untuk Income Inequality South Africa*")
+    st.markdown("# Data Preparation")
+    st.markdown("Data Cleaning, Transformation, dan Exploration untuk Income Inequality South Africa")
     st.markdown("---")
     
     # Load data original untuk perbandingan
     df_original = df_raw.copy()
     
     # ========== STEP 1: Data Loading & Initial Exploration ==========
-    st.markdown("## 📥 STEP 1: Data Loading & Initial Exploration")
+    st.markdown("## STEP 1: Data Loading & Initial Exploration")
     
     st.markdown("""
     <div class='highlight-box'>
-        <strong>📌 Penjelasan Step 1:</strong><br>
+        <strong>Penjelasan Step 1:</strong><br>
         ✓ Membaca file Excel yang berisi data Income Inequality South Africa<br>
         ✓ Menyimpan copy original untuk perbandingan sebelum vs sesudah preprocessing
     </div>
@@ -54,7 +54,7 @@ def show(df_raw):
     
     # Data Info dengan Tabs
     st.subheader("Data Information")
-    tabs1 = st.tabs(["📊 Data Types", "📈 Summary Statistics", "❓ Missing Values"])
+    tabs1 = st.tabs(["Data Types", "Summary Statistics", "Missing Values"])
     
     with tabs1[0]:
         st.write("**Column Data Types:**")
@@ -265,4 +265,3 @@ def show(df_raw):
         ✓ Data siap untuk Modeling dan Evaluation
     </div>
     """, unsafe_allow_html=True)
-
