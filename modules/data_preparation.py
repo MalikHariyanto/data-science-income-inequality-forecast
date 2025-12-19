@@ -18,7 +18,6 @@ def show(df_raw):
     <div class='highlight-box'>
         <strong>📌 Penjelasan Step 1:</strong><br>
         ✓ Membaca file Excel yang berisi data Income Inequality South Africa<br>
-        ✓ Menggunakan @st.cache_data untuk optimasi performa (data tidak reload setiap kali interaksi)<br>
         ✓ Menyimpan copy original untuk perbandingan sebelum vs sesudah preprocessing
     </div>
     """, unsafe_allow_html=True)
@@ -266,3 +265,4 @@ def show(df_raw):
         ✓ Data siap untuk Modeling dan Evaluation
     </div>
     """, unsafe_allow_html=True)
+
