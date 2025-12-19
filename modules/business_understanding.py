@@ -2,24 +2,24 @@ import streamlit as st
 import pandas as pd
 
 def show(df_raw):
-    st.markdown("# 💼 Business Understanding")
-    st.markdown("*Memahami konteks bisnis dan tujuan proyek*")
+    st.markdown("# Business Understanding")
+    st.markdown("Memahami konteks bisnis dan tujuan proyek")
     st.markdown("---")
 
-    # ===== Tambahan: Latar Belakang, Rumusan Masalah, Tujuan =====
+    # ===== Latar Belakang, Rumusan Masalah, Tujuan =====
     st.markdown("""
     <div class='highlight-box'>
-        <h3>🔎 Latar Belakang</h3>
+        <h3>Latar Belakang</h3>
         <p>
         Ketimpangan pendapatan merupakan salah satu isu utama yang dihadapi oleh banyak negara berkembang, termasuk Afrika Selatan. Tingginya tingkat ketimpangan dapat berdampak negatif terhadap pertumbuhan ekonomi, stabilitas sosial, dan kesejahteraan masyarakat. Oleh karena itu, pemahaman yang mendalam mengenai tren dan faktor-faktor yang mempengaruhi ketimpangan pendapatan sangat penting untuk merumuskan kebijakan yang efektif.
         </p>
-        <h3>❓ Rumusan Masalah</h3>
+        <h3>Rumusan Masalah</h3>
         <ul>
             <li>Bagaimana tren ketimpangan pendapatan di Afrika Selatan selama beberapa dekade terakhir?</li>
             <li>Faktor-faktor apa saja yang berkontribusi terhadap perubahan tingkat ketimpangan tersebut?</li>
             <li>Bagaimana memprediksi tingkat ketimpangan pendapatan di masa depan menggunakan metode forecasting?</li>
         </ul>
-        <h3>🎯 Tujuan</h3>
+        <h3>Tujuan</h3>
         <ul>
             <li>Menganalisis tren ketimpangan pendapatan di Afrika Selatan berdasarkan data historis.</li>
             <li>Mengidentifikasi faktor-faktor utama yang mempengaruhi ketimpangan pendapatan.</li>
@@ -31,7 +31,7 @@ def show(df_raw):
     # david, business under - Redesigned UI
     st.markdown("""
     <div class='process-header'>
-        <h3>📚 Metodologi CRISP-DM</h3>
+        <h3>Metodologi CRISP-DM</h3>
         <p>Cross-Industry Standard Process for Data Mining</p>
     </div>
     """, unsafe_allow_html=True)
@@ -83,4 +83,4 @@ def show(df_raw):
         """, unsafe_allow_html=True)
         
     st.markdown("<br>", unsafe_allow_html=True)
-    st.info("Aplikasi ini mengimplementasikan keenam tahapan di atas secara berurutan, dimulai dari memahami konteks bisnis hingga deployment dalam bentuk dashboard interaktif ini.")
+    st.info("Aplikasi ini mengimplementasikan keenam tahapan di atas secara berurutan, dimulai dari memahami konteks bisnis hingga deployment dalam bentuk dashboard interaktif.")
