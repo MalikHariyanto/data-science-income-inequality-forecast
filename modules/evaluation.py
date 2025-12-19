@@ -4,13 +4,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def show(df_raw):
-    st.markdown("# ✅ Evaluation")
-    st.markdown("*Evaluasi performa model forecasting*")
+    st.markdown("# Evaluation")
+    st.markdown("Evaluasi performa model forecasting")
     st.markdown("---")
     
     st.markdown("""
     <div class='process-header'>
-        <h3>📊 Metrik Evaluasi Model</h3>
+        <h3>Metrik Evaluasi Model</h3>
         <p>Menggunakan berbagai metrik error untuk mengukur akurasi model forecasting.</p>
     </div>
     """, unsafe_allow_html=True)
@@ -18,7 +18,7 @@ def show(df_raw):
     # Parameter
     with st.sidebar:
         st.markdown("---")
-        st.markdown("### 📊 Parameter Evaluasi")
+        st.markdown("### Parameter Evaluasi")
         alpha = st.slider("Alpha (α)", min_value=0.01, max_value=0.99, value=0.80, step=0.01, key="eval_alpha")
         periods_ahead = st.number_input("Periode Prediksi", min_value=1, max_value=20, value=5, key="eval_periods")
         
@@ -42,7 +42,7 @@ def show(df_raw):
     
     # Validasi Data (dari referensi)
     if n < 4:
-        st.error("❌ Data tidak cukup untuk melakukan evaluasi. Minimal diperlukan 4 data points.")
+        st.error("Data tidak cukup untuk melakukan evaluasi. Minimal diperlukan 4 data points.")
         return
 
     # 2. DES Calculation (Brown) - Loop Manual sesuai referensi
