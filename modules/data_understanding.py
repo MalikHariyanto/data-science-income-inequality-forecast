@@ -3,8 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 def show(df_raw):
-    st.markdown("# 🔍 Data Understanding")
-    st.markdown("*Eksplorasi dan pemahaman karakteristik data*")
+    st.markdown("# Data Understanding")
+    st.markdown("Eksplorasi dan pemahaman karakteristik data")
     st.markdown("---")
     
     # andi, data under - Redesigned UI based on dataunder_ineq.py
